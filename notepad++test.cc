@@ -6,6 +6,6 @@ int main()
 	utw.openFile((TEXT("npp.txt")));
 	for(::std::size_t i{};i!=1000000;++i)
 	{
-		utw.writeFile("Hello World\n",12);
+		utw.writeFile(u8"Hello World\n",12);
 	}
 }

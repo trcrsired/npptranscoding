@@ -3,9 +3,9 @@ int main()
 	fast_io::timer t(u8"notepad++");
 	Utf8_16_Write utw;
 	utw.setEncoding(uni16LE);
-	utw.openFile((TEXT("npp.txt")));
+	utw.openFile((TEXT("nppemoji.txt")));
 	for(::std::size_t i{};i!=1000000;++i)
 	{
-		utw.writeFile("Hello World\n",12);
+		utw.writeFile(u8"😘😗😙😚😋\n",sizeof(u8"😘😗😙😚😋\n")-1u);
 	}
 }
