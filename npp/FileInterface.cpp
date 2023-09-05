@@ -17,7 +17,9 @@
 #include <locale>
 #include <codecvt>
 #include "FileInterface.h"
+#if 0
 #include "Parameters.h"
+#endif
 
 Win32_IO_File::Win32_IO_File(const char *fname)
 {
@@ -38,26 +40,6 @@ Win32_IO_File::Win32_IO_File(const wchar_t *fname)
 		_path = converter.to_bytes(fn);
 		_hFile = ::CreateFileW(fname, _accessParam, _shareParam, NULL, _dispParam, _attribParam, NULL);
 
-		NppParameters& nppParam = NppParameters::getInstance();
-		if (nppParam.isEndSessionStarted() && nppParam.doNppLogNulContentCorruptionIssue())
-		{
-			generic_string issueFn = nppLogNulContentCorruptionIssue;
-			issueFn += TEXT(".log");
-			generic_string nppIssueLog = nppParam.getUserPath();
-			pathAppend(nppIssueLog, issueFn);
-
-			std::string msg = _path;
-			if (_hFile != INVALID_HANDLE_VALUE)
-			{
-				msg += " is opened.";
-			}
-			else
-			{
-				msg += " failed to open, CreateFileW ErrorCode: ";
-				msg += std::to_string(::GetLastError());
-			}
-			writeLog(nppIssueLog.c_str(), msg.c_str());
-		}
 	}
 }
 
@@ -75,32 +57,6 @@ void Win32_IO_File::close()
 
 		_hFile = INVALID_HANDLE_VALUE;
 
-
-		NppParameters& nppParam = NppParameters::getInstance();
-		if (nppParam.isEndSessionStarted() && nppParam.doNppLogNulContentCorruptionIssue())
-		{
-			generic_string issueFn = nppLogNulContentCorruptionIssue;
-			issueFn += TEXT(".log");
-			generic_string nppIssueLog = nppParam.getUserPath();
-			pathAppend(nppIssueLog, issueFn);
-
-
-			std::string msg;
-			if (flushError != NOERROR)
-			{
-				LPSTR messageBuffer = nullptr;
-				FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-					nullptr, flushError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, nullptr);
-				msg += messageBuffer;
-
-				//Free the buffer.
-				LocalFree(messageBuffer);
-				msg += "\n";
-			}
-			msg += _path;
-			msg += " is closed.";
-			writeLog(nppIssueLog.c_str(), msg.c_str());
-		}
 	}
 }
 
@@ -159,6 +115,7 @@ bool Win32_IO_File::write(const void *wbuf, size_t buf_size)
 		}
 	} while (success && bytes_left_to_write);
 
+#if 0
 	NppParameters& nppParam = NppParameters::getInstance();
 
 	if (success == FALSE)
@@ -198,6 +155,7 @@ bool Win32_IO_File::write(const void *wbuf, size_t buf_size)
 			writeLog(nppIssueLog.c_str(), msg.c_str());
 		}
 	}
+#endif
 
 	if (!_written)
 		_written = true;
