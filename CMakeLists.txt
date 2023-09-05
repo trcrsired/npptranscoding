@@ -25,4 +25,4 @@ add_executable(fast_io_test fast_io_test.cc)
 target_precompile_headers(fast_io_test PRIVATE fast_io/pch.hpp)
 
 add_executable(fast_io_test_emoji fast_io_test_emoji.cc)
-target_precompile_headers(fast_io_test_emoji REUSE_FROM fast_io_test)
+target_precompile_headers(fast_io_test_emoji PRIVATE fast_io/pch.hpp)
